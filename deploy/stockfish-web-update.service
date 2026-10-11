@@ -1,0 +1,8 @@
+[Unit]
+Description=Pull and deploy the latest Stockfish FEN viewer from GitHub
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/chess-stockfish/deploy/update.sh
