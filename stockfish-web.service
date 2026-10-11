@@ -1,0 +1,17 @@
+[Unit]
+Description=Stockfish FEN viewer (Flask)
+After=network.target
+
+[Service]
+User=stockfish
+WorkingDirectory=/opt/chess-stockfish
+# Debian/Ubuntu install the engine in /usr/games, which is not on a service's PATH.
+Environment=STOCKFISH_PATH=/usr/games/stockfish
+ExecStart=/opt/chess-stockfish/.venv/bin/python web.py --host 0.0.0.0 --port 8000 --threads 2
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

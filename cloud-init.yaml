@@ -1,0 +1,34 @@
+#cloud-config
+# Proxmox "custom user-data" for an Ubuntu 24.04 cloud-image VM.
+# On first boot it installs everything and starts the viewer by itself.
+#
+# Before use, replace:
+#   - YOUR_USER / YOUR_REPO with your GitHub account and repository (must be public,
+#     or see deploy/README.md for private repositories)
+#   - the ssh-ed25519 line with your own public key (~/.ssh/id_ed25519.pub)
+#
+# Note: when you use cicustom, Proxmox ignores the user / password / SSH key fields in
+# the VM's Cloud-Init tab, so the login user is defined here.
+
+hostname: stockfish-web
+manage_etc_hosts: true
+
+users:
+  - name: admin
+    groups: [sudo]
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAA...replace-with-your-public-key you@example
+
+package_update: true
+packages:
+  - qemu-guest-agent
+  - curl
+  - git
+
+runcmd:
+  - systemctl enable --now qemu-guest-agent
+  - curl -fsSL https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/deploy/install.sh -o /root/install.sh
+  - REPO_URL=https://github.com/YOUR_USER/YOUR_REPO.git bash /root/install.sh

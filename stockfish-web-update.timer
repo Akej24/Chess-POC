@@ -1,0 +1,10 @@
+[Unit]
+Description=Check GitHub for Stockfish FEN viewer updates
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Unit=stockfish-web-update.service
+
+[Install]
+WantedBy=timers.target
